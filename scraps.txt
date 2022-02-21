@@ -1,0 +1,104 @@
+class Error(Exception):
+    pass
+
+class IncorrectTokenTypeError(Error):
+    def __init__(self, current_token, token_type):
+        self.message = "TokenType <   {}   > found.".format(str(current_token.type)) + "Expected TokenType <   {}   >\n".format(str(token_type))
+
+    def __str__(self):
+        return f'Incorrect TokenType passed.\n{self.message}'
+
+build_while_* scraps:
+    print("Building While Statement (While Node):")
+    print("Condition [should be Boolean Expression or Boolean Comparison]: {condition}\n".format(condition = repr(condition)))
+    print("Block Statement [should be Statement (*_Node)]: {block_statement}\n\n\n".format(block_statement = repr(block_statement)))
+
+build_if_* scraps:
+    print("Building If Statement (If Node):")
+    print("Condition [should be Boolean Expression or Boolean Comparison]: {condition}\n".format(condition = repr(condition)))
+    print("True Branch [should be Statement (*_Node)]: {true_branch}\n".format(true_branch = repr(true_branch)))
+    print("False Branch [should be Statement (*_Node)]: {false_branch}\n\n\n".format(false_branch = repr(false_branch)))
+
+build_assignment_* scraps:
+    print("Assigning {} value.\nIdentifier: {}\nValue: {}\n\n".format(repr(operator), repr(left_child), repr(right_child)))
+
+    print("Building Assignment (Binary Node):")
+    print("Operand [should be Assignment Operator (:=)]: {operator}".format(operator = repr(operator)))
+    print("Left Child [should be left operand / statement identifier]: {left_child}".format(left_child = repr(left_child)))
+    print("Right Child [should be right operand / statement value]: {right_child}\n\n".format(right_child = repr(right_child)))
+
+build_boolean_expression scraps:
+            print("Building Boolean Expression (Binary Node):")
+            print("Operand [should be Logical Operators]: {operator}".format(operator = repr(current_node.operator)))
+            print("Left Child [should be left operand / statement identifier]: {left_child}".format(left_child = repr(current_node.left_child)))
+            print("Right Child [should be right operand / statement value]: {right_child}\n\n".format(right_child = repr(current_node.right_child)))
+
+build_boolean_comparison > *_Operator scraps:
+            print("Building Boolean Comparison (Binary Node):")
+            print("Operand [should be Boolean Comparison Operators]: {operator}".format(operator = repr(current_node.operator)))
+            print("Left Child [should be left operand / statement identifier]: {left_child}".format(left_child = repr(current_node.left_child)))
+            print("Right Child [should be right operand / statement value]: {right_child}\n\n".format(right_child = repr(current_node.right_child)))
+
+build_boolean_comparison > LEFTPARENTHESIS scraps:
+      if (type(current_node) == Operand_Node):
+          print("Building Parenthesized Statement (Operand Node):")
+          print("Type (should be boolean value): {}".format(str(current_node.type)))
+          print("Value (should be True or False): {}\n\n".format(str(current_node.value)))
+      elif (type(current_node) == Unary_Node):
+          print("Building Parenthesized Statement (Unary Node):")
+          print("Operator: {}".format(str(current_node.operator)))
+          print("Child (value to be negated): {}\n\n".format(str(current_node.child)))
+      elif (type(current_node) is Binary_Node):
+          print("Operand [should be Boolean Comparison Operator (<, <=, >, >=)]:   {operator}".format(operator = repr(current_node.operator)))
+          print("Left Child [should be left operand (arithmetic value)]:   {left_child}".format(left_child = repr(current_node.left_child)))
+          print("Right Child [should be right operand (arithmetic value):   {right_child}\n\n".format(right_child = repr(current_node.right_child)))
+      else:
+          print("Building Parenthesize statement for: {}".format(str(type(current_node))))
+          print("FIXME: Case unhandled. Please create custom print segment for this case.\n\n")
+
+build_boolean_comparison > NOT
+      print("Building Unary Node:")
+      print("Operator: {}".format(str(NOT)))
+      print("Child: {}\n\n".format(str(value)))
+
+build_arithmetic_* scraps:
+            print("Building Arithmetic Expression (Binary Node):")
+            print("Operand [should be Arithmetic Operator (+, -, *, /, %)]:   {operator}".format(operator = repr(current_node.operator)))
+            print("Left Child [should be left operand (int, var, or *_Node)]:   {left_child}".format(left_child = repr(current_node.left_child)))
+            print("Right Child [should be right operand (int, var, or *_Node)]:   {right_child}\n\n".format(right_child = repr(current_node.right_child)))
+
+build_term scraps:
+
+            print("Building Arithmetic Expression (Binary Node):")
+            print("Operand [should be Arithmetic Operator (+, -, *, /, %)]: {operator}".format(operator = repr(current_node.operator)))
+            print("Left Child [should be left operand / statement identifier]: {left_child}".format(left_child = repr(current_node.left_child)))
+            print("Right Child [should be right operand / statement value]: {right_child}\n\n".format(right_child = repr(current_node.right_child)))
+
+build_factor scraps:
+  > LEFTPARENTHESIS:
+        print("Parenthesized Arithmetic Expression encountered...\n\n")
+        self.advance_after_verification(LEFTPARENTHESIS)
+        current_node = self.build_arithmetic_expression()
+        self.advance_after_verification(RIGHTPARENTHESIS)
+  > INT BOOL:
+        print("Building Operand Node:")
+        print("Type: {}".format(str(current_token_type)))
+        print("Value: {}\n\n".format(str(current_value)))
+
+build_var scraps:
+        print("Building Variable (Variable Node):")
+        print("Current token [should be Token(Variable Name, Variable Identifier)]: {token}".format(token = repr(self.current)))
+        print("Current Node [should be left operand]: {node}\n\n".format(node = repr(current_node)))
+
+advance_after_* scraps:
+else:
+        print("Error: Current type ({}) does not match token type passed ({}).\n\n".format(self.current.type, token_type))
+        if (self.lexer.current == token_type):
+            print("Current token in Lexer is a match.\nThere is an issue with your Parser method for type {}\n\n".format(token_type))
+        return
+
+Parser init scraps:
+print("Parser Initialized....\nInitial value: {}\n\n".format(repr(self.current)))
+
+Lexer get_next_token scraps:
+print("Getting Next Token for: {}\nIndex: {}\n\n".format(str(self.current), str(self.index)))
