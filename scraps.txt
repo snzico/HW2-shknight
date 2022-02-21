@@ -1,3 +1,29 @@
+def get_constants_dictionary():
+    keys = "LEFTPARENTHESIS, RIGHTPARENTHESIS, LEFTBRACKET, RIGHTBRACKET, LEFTBRACE, RIGHTBRACE, ADD, SUB, MUL, DIV, MOD, LESSTHAN, LESSTHANEQUALS, GREATERTHAN, GREATERTHANEQUALS, NOT, EQUAL, AND, OR, COLON, SEMICOLON, ASSIGN, WHILE, DO, SKIP, IF, THEN, ELSE, BOOL, TRUE, FALSE, VARIABLE, INTEGER, STRING, EOF".split(', ')
+    values = "(, ), [, ], {, }, +, -, *, /, %, <, <=, >, >=, ¬, =, ∧, ∨, :, ;, :=, while, do, skip, if, then, else, bool, true, false, identifier, integer, string, EOF".split(', ')
+    constants ={}
+
+    for i in range(len(keys)):
+        constants[keys[i]] = values[i]
+
+    if len(constants) > 0:
+        print("Constants: " + constants + "\n\n")
+        return constants
+    else:
+        print("Constants empty.\n\n")
+        return {}
+
+        # Function build_scope(self):
+        # Receives variable it is called by
+        #   - Should be interpreter (variable of type Interpreter) in main()
+        # Returns root_node of AST
+        #
+        # Works by determing the scope
+        #   - Calling function .build_scope_list() on interpreter
+        #   - During the first step of .build_scope_list(), interpreter is passed to .build_statement()
+        #   - This continues (call of next function during 1st step of current function) until .build_factor() is reached
+        #   - After the list of nodes in the interpreter are worked through, the root_node is returned, having had its
+
 class Error(Exception):
     pass
 

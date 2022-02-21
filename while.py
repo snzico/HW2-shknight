@@ -2,23 +2,15 @@ import locale
 
 locale.getdefaultlocale()
 
+# Declaration and Initialization of Global Variables
+# Each variable represents a TokenType
 LEFTPARENTHESIS, RIGHTPARENTHESIS, LEFTBRACKET, RIGHTBRACKET, LEFTBRACE, RIGHTBRACE, ADD, SUB, MUL, DIV, MOD, LESSTHAN, LESSTHANEQUALS, GREATERTHAN, GREATERTHANEQUALS, NOT, EQUAL, AND, OR, COLON, SEMICOLON, ASSIGN, WHILE, DO, SKIP, IF, THEN, ELSE, BOOL, TRUE, FALSE, VARIABLE, INTEGER, STRING, EOF = '(', ')', '[', ']', '{', '}', '+', '-', '*', '/', '%', '<', '<=', '>', '>=', '¬', '=', '∧', '∨', ':', ';', ":=", "while", "do", "skip", "if", "then", "else", "bool", "true", "false", "identifier", "integer", "string", "EOF"
 
-def get_constants_dictionary():
-    keys = "LEFTPARENTHESIS, RIGHTPARENTHESIS, LEFTBRACKET, RIGHTBRACKET, LEFTBRACE, RIGHTBRACE, ADD, SUB, MUL, DIV, MOD, LESSTHAN, LESSTHANEQUALS, GREATERTHAN, GREATERTHANEQUALS, NOT, EQUAL, AND, OR, COLON, SEMICOLON, ASSIGN, WHILE, DO, SKIP, IF, THEN, ELSE, BOOL, TRUE, FALSE, VARIABLE, INTEGER, STRING, EOF".split(', ')
-    values = "(, ), [, ], {, }, +, -, *, /, %, <, <=, >, >=, ¬, =, ∧, ∨, :, ;, :=, while, do, skip, if, then, else, bool, true, false, identifier, integer, string, EOF".split(', ')
-    constants ={}
-
-    for i in range(len(keys)):
-        constants[keys[i]] = values[i]
-
-    if len(constants) > 0:
-        print("Constants: " + constants + "\n\n")
-        return constants
-    else:
-        print("Constants empty.\n\n")
-        return {}
-
+# Token includes each alphanumeric value, delimited by spaces, inputted via stdin by user
+# Token(type, value)
+# Receives:
+#   - Token.type is the relevant label (see global variables) for inputted token
+#   - Token.value is the inputted value
 class Token(object):
     def __init__(self, type, value):
         self.type = type
@@ -31,9 +23,15 @@ class Token(object):
     def __repr__(self):
         return self.__str__()
 
+# AST is no-op (pass) parent of each *_Node type
 class AST:
     pass
 
+# Root_Node is the root node of the AST
+# Root_Node(left_child, right_child)
+# Receives:
+#   - left_child is a *_Node or Token object that represents the immediate child node along the left edge of Root_Node
+#   - right_child is a *_Node or Token object that represents the immediate child node along the right edge of Root_Node
 class Root_Node(AST):
     def __init__(self, left_child, right_child):
         self.left_child = left_child
@@ -47,7 +45,10 @@ class Root_Node(AST):
 
 # Unary_Node includes:
 #   - Negated Values (i.e. Values prepended by 'Not' / ¬)
-#       - operator = logical operator [¬], child = value
+# Unary_Node(operator, child)
+# Receives:
+#   - operator is a string that represents the operator used in the evaluation of the expression represented by the parameters of the Unary_Node
+#   - child is a *_Node or Token which represents the Unary_Node's value
 class Unary_Node(AST):
     def __init__(self, operator, child):
         self.operator = operator
@@ -60,14 +61,15 @@ class Unary_Node(AST):
         return self.__str__()
 
 # Binary_Node includes:
-#   - Arithmetic Expressions
-#       - operator = arithmetic operator [+, -, *, /, %], left_child = left operand, right_child = right operand
-#   - Boolean Comparisons
-#       - operator = boolean comparison operator [<, <=, >, >=], left_child = left operand, right_child = right operand
-#   - Boolean Expressions
-#       - operator = logical operator [∧, ∨], left_child = left operand, right_child = right operand
-#   - Assignments
-#       - operator = assignment operand [:=], left_child = variable identifier, right_child = assigned value [numeric or identifier value]
+#   - Arithmetic Expressions (operator = arithmetic operator [+, -, *, /, %], left_child = left operand, right_child = right operand)
+#   - Boolean Comparisons (operator = boolean comparison operator [<, <=, >, >=], left_child = left operand, right_child = right operand)
+#   - Boolean Expressions (operator = logical operator [∧, ∨], left_child = left operand, right_child = right operand)
+#   - Assignments (operator = assignment operator [:=], left_child = variable identifier, right_child = assigned value [numeric or identifier value])
+# Binary_Node(operator, left_child, right_child)
+# Receives:
+#   - operator is an Operand_Node (for Assignment [:=]) or Token that represents the operator used in the evaluation of the expression represented by the parameters of the Binary_Node
+#   - left_child is a *_Node or Token object that represents the immediate child node along the left edge of Binary_Node
+#   - right_child is a *_Node or Token object that represents the immediate child node along the right edge of Binary_Node
 class Binary_Node(AST):
     def __init__(self, operator, left_child, right_child):
         self.operator = operator
@@ -85,10 +87,11 @@ class Binary_Node(AST):
 # Operand_Node includes:
 #   - Number (Integer and Float) values
 #   - Boolean literals
-#   - Arithmetic
-# Equivalent: Assign ****
-#             Num    ****
-#             Bool   ****
+#   - Assignment Operator
+# Operand_Node(type, value)
+# Receives:
+#   - type represents the relevant TokenType of the Token used to initialize new instance of Operand_Node
+#   - value represents the value of the Token (provided by user via stdin) used to initialize new instance of Operand_Node
 class Operand_Node(AST):
     def __init__(self, type, value):
         self.type = type
@@ -101,11 +104,12 @@ class Operand_Node(AST):
         return self.__str__()
 
 # Variable_Node includes all variables
-#   - When an alphanumeric identifier is found, a new instance is created
-#   - Receives an identifier from lexer.get_next_token() case
-#       - Initializes self.identifier to received identifier
-#   - Initializes value to 0
-#   - Updates self.value to variable value
+#   - Lexer.get_next_token() employs builtin isidentifier() function to determine when an alphanumeric identifier is found
+# Variable_Node(identifier, value)
+# Receives an identifier from lexer.get_next_token() case
+#   - identifier represents the alphanumeric identifier (name / placeholder) of the variable
+# Value is initialized to 0
+# Value is updated to variable value when Assignment Statement (variable := [value]) in Parser.build_assignment_statement (from Parser.build_statement() < Parser.build_scope() < Parser.parse())
 class Variable_Node(AST):
     def __init__(self, identifier):
         self.identifier = identifier
@@ -117,12 +121,22 @@ class Variable_Node(AST):
     def __repr__(self):
         return self.__str__()
 
+# Skip_Node includes Skip statements found in conditional statements
+# Skip_Node()
+# Receives:
+#   - No values received at or after initialization
 class Skip_Node(AST):
     pass
 
     def __str__(self):
         return "\n--SKIPNODE Skip_Node{{pass}}  SKIPNODE--\n"
 
+# If_Node represents If (Conditional Command) Statements
+# If_Node(condition, true_branch, false_branch)
+# Receives:
+#   - condition represents the conditional statement that is evaluated following an If token encounter
+#   - true_branch is a *_Node that represents the statement(s) executed when condition evaluates to True
+#   - false_branch is a *_Node that represents the statement(s) executed when condition evaluates to False
 class If_Node(AST):
     def __init__(self, condition, true_branch, false_branch):
         self.condition = condition
@@ -135,6 +149,11 @@ class If_Node(AST):
     def __repr__(self):
         return self.__str__()
 
+# While_Node represents While (Loop) Statements
+# While_Node(condition, block_statement)
+# Receives:
+#   - condition represents the conditional statement that is evaluated following a While token encounter until the condition evaluates to False
+#   - block_statement represents the statement(s) evaluated while the condition evaluates to True
 class While_Node(AST):
     def __init__(self, condition, block_statement):
         self.condition = condition
@@ -146,12 +165,19 @@ class While_Node(AST):
     def __repr__(self):
         return self.__str__()
 
+# Lexer receives user input as a list of values that can include any value represented by a Global Variables listed above
+# Lexer(input)
+# Receives:
+#   - input represents user input via stdin that is split at every space value before passing to Lexer initialization
 class Lexer(object):
     def __init__(self, input):
         self.input = input
         self.index = 0
         self.current = self.input[self.index]
 
+    # Lexer.index is incremented by 1
+    # If Lexer.index is in the bounds of Lexer.input, the current element to be tokenized is set to the next value in Lexer.input
+    # If Lexer.index is out of bounds of Lexer.input, the current element is set to None, to break the while loop in Lexer.get_next_token()
     def advance(self):
         self.index = self.index + 1
 
@@ -160,6 +186,10 @@ class Lexer(object):
         else:
             self.current = self.input[self.index]
 
+    # Lexer.current is compared to each Global Variable by value
+    # Should a match be found, a relevant Token() is created
+    # A while loop is used to ensure each value passed to Lexer.input is evaluated and tokenized
+    # When Lexer.advance returns None, the while loop is broken, and Token(EOF, None) [signifying End Of File] is returned
     def get_next_token(self):
         while self.current is not None:
             if (self.current.isnumeric() or self.current.strip('-').isnumeric()):
@@ -281,62 +311,68 @@ class Lexer(object):
                 return Token(VARIABLE, identifier)
 
         return Token(EOF, None)
-
+# Parser iterates through the tokens in Lexer and parses an AST relative to the precedence of each token and its fields
+# Parser(lexer)
+# Receives:
+#   - lexer represents an instance of the Lexer class that has been initialized with user_input via stdin that has been split at each space
 class Parser(object):
     def __init__(self, lexer):
         self.lexer = lexer
         self.current = self.lexer.get_next_token()
 
-
+    # Begin parsing of first (and possibly only) Scope
     def parse(self):
         return self.build_scope()
 
+    # Set current Token to the value returned by lexer.get_next_token() and received by Parser.lexer field
     def advance(self):
         self.current = self.lexer.get_next_token()
 
+    # Verify that the source TokenType is equivalent to the destination TokenType before assign next token from Parser.lexer to Parser.current
     def advance_after_verification(self, token_type):
         if (self.current.type) == token_type:
             self.advance()
 
+    # An Assignment Operator or Variable Identifier has been encountered
+    # Builds a Variable_Node with received identifier
     def build_variable(self, identifier):
         current_node = Variable_Node(identifier = identifier)
-
-
         self.advance_after_verification(VARIABLE)
 
         return current_node
 
+    # Called from Parser.build_term(), at first line of .build_term(), or during creation of Binary_Node() for MUL or DIV
+    # First build_* function executed completely
+    # An Integer Literal [0 - 9] or Boolean Literal [true, false] token has been encountered
     def build_factor(self):
         current_token_type = self.current.type
         current_value = self.current.value
 
         if current_token_type in [INTEGER, BOOL]:
+
             if current_token_type == INTEGER:
                 self.advance_after_verification(INTEGER)
             else:
                 self.advance_after_verification(BOOL)
-
-
             return Operand_Node(current_token_type, current_value)
 
         elif current_token_type == LEFTPARENTHESIS:
-
-
             return current_node
 
         elif current_token_type == VARIABLE:
             return self.build_variable(current_value)
 
+    # Called from Parser.build_arithmetic_expression(), at first line of .build_arithmetic_expression(), or during creation of Binary_Node() for ADD or SUB
+    # Second build_* function executed completely
+    # An Arithmetic Operator [MUL, DIV] has been encountered
     def build_term(self):
         current_node = self.build_factor()
-        # current_token_type = self.current.type
-        # current_token_value = self.current.value
 
         while self.current.type in [MUL, DIV]:
             current_token = self.current
 
             if self.current.type is MUL:
-                self.advance_after_verification(MUL)
+                self.advance_after_verification(MUL)bui
             else:
                 self.advance_after_verification(DIV)
 
@@ -344,6 +380,9 @@ class Parser(object):
 
         return current_node
 
+    # Called from Parser.build_boolean_comparison() function, after self.current is tested against NOT and LEFTPARENTHESIS, or during creation of Binary_Node() for a Boolean Comparison Operator
+    # Third build_* function executed completely
+    # An Arithmetic Operator [ADD, SUB] has been encountered
     def build_arithmetic_expression(self):
         current_node = self.build_term()
 
@@ -360,45 +399,51 @@ class Parser(object):
 
         return current_node
 
+    # Called from Parser.build_boolean_expression() function, at first like of .build_boolean_expression()
+    # Fourth build_* function executed completely
+    # A Boolean Comparison Operator [<, <=, >, >=] has been encountered
     def build_boolean_comparison(self):
         if self.current.type == NOT:
             self.advance_after_verification(NOT)
             value = self.build_boolean_expression()
 
-
             return Unary_Node(operator = NOT, child = value)
 
         elif (self.current.type) is LEFTPARENTHESIS:
             self.advance_after_verification(LEFTPARENTHESIS)
-
             current_node = self.build_boolean_expression()
-
             self.advance_after_verification(RIGHTPARENTHESIS)
-
             return current_node
 
         current_node = self.build_arithmetic_expression()
 
         while self.current.type in [EQUAL, LESSTHAN, LESSTHANEQUALS, GREATERTHAN, GREATERTHANEQUALS]:
             current_token = self.current
-
             self.advance_after_verification(current_token.type)
-
             current_node = Binary_Node(operator = current_token, left_child = current_node, right_child = self.build_arithmetic_expression())
 
         return current_node
 
+    # Called from Parser.build_boolean_comparison() when self.current is [NOT, LEFTPARENTHESIS],
+    #   Parser.build_boolean_expression() during creation of Binary_Node() for [AND, OR],
+    #   Parser.build_assignment_statement() during creation of Binary_Node for ASSIGN,
+    #   or Parser.build_if_statement() / Parser.build_while_statement() as condition during creation of [If_Node, While_Node]
+    # Fifth build_* function executed completely
+    # A Boolean Expression Operator [AND, OR] has been encountered
     def build_boolean_expression(self):
         current_node = self.build_boolean_comparison()
 
         while self.current.type in [AND, OR]:
             current_token = self.current
             self.advance_after_verification(current_token.type)
-
             current_node = Binary_Node(operator = current_token, left_child = current_node, right_child = self.build_boolean_expression())
 
         return current_node
 
+    # Called from Parser.build_while_statement() as block_statement during creation of While_Node,
+    #   and from Parser.build_scope() to begin comparison of tokens
+    # Seventh build_* function executed completely
+    # A [SKIP, LEFTBRACE, IF, WHILE, VARIABLE] has been encountered
     def build_statement(self):
         if self.current.type == SKIP:
             self.advance_after_verification(SKIP)
@@ -417,23 +462,24 @@ class Parser(object):
         if self.current.type == VARIABLE:
             return self.build_assignment_statement()
 
+    # Called from Parser.build_statement() when VARIABLE token encountered
+    # Sixth build_* function executed completely
+    # A VARIABLE and ASSIGN (:=) have been encountered
     def build_assignment_statement(self):
         left_child = self.build_variable(self.current.value)
-
         operator = Operand_Node(ASSIGN, ':=')
         self.advance_after_verification(ASSIGN)
-
         right_child = self.build_boolean_expression()
         left_child.value = right_child
 
-
         return Binary_Node(operator, left_child, right_child)
 
+    # Called from Parser.build_statement() when IF token encountered
+    # Sixth build_* function executed completely
+    # An IF, THEN and possibly ELSE have been encountered
     def build_if_statement(self):
         false_branch = None
-
         condition = self.build_boolean_expression()
-
         self.advance_after_verification(THEN)
         true_branch = self.build_scope()
 
@@ -441,29 +487,25 @@ class Parser(object):
             self.advance_after_verification(ELSE)
             false_branch = self.build_scope()
 
-
         return If_Node(condition, true_branch, false_branch)
 
+    # Called from Parser.build_statement() when WHILE token encountered
+    # Sixth build_* function executed completely
+    # A WHILE and DO token have been encountered
     def build_while_statement(self):
         condition = self.build_boolean_expression()
-
         self.advance_after_verification(DO)
         block_statement = self.build_statement()
 
-
-
         return While_Node(condition, block_statement)
 
-    # Function build_scope(self):
-    # Receives variable it is called by
-    #   - Should be interpreter (variable of type Interpreter) in main()
-    # Returns root_node of AST
-    #
-    # Works by determing the scope
-    #   - Calling function .build_scope_list() on interpreter
-    #   - During the first step of .build_scope_list(), interpreter is passed to .build_statement()
-    #   - This continues (call of next function during 1st step of current function) until .build_factor() is reached
-    #   - After the list of nodes in the interpreter are worked through, the root_node is returned, having had its
+    # Called from Parser.parse() to begin parsing a complete statement with a definite scope
+    #   from Parser.build_statement() when LEFTBRACE encountered, signifying a solution statement (for comparison) has been encountered,
+    #   from Parser.build_if_statement() when THEN encountered to create true_branch,
+    #   from Parser.build_if_statement() if ELSE encountered to create false_branch,
+    #   from Parser.build_scope() when SEMICOLON encountered, signifying end of nested statement and need for new sub-scope
+    # Eighth and final build_* function executed completely
+    # A SEMICOLON may have been encountered, or Parser.parse() was called immediately before function call
     def build_scope(self):
         current_node = self.build_statement()
 
@@ -517,7 +559,6 @@ class Interpreter(object):
         }
 
         returnValue = match_type[node_type](node)
-        print("Node: " + repr(node) + "\nSent to function " + str(match_type[node_type]) + "\nNode type: " + str(node_type) + "\nReturn Value: " + str(returnValue) + "\n\n")
         return returnValue
 
     def visit_root_node(self, node):
@@ -558,8 +599,6 @@ class Interpreter(object):
             GREATERTHAN: (lambda: int(left_operand) > int(right_operand)),
             GREATERTHANEQUALS: (lambda: int(left_operand) >= int(right_operand)),
         }
-
-        boop
 
         return match_operation[node_operation]()
 
