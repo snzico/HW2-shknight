@@ -1,6 +1,61 @@
-import locale
+#!/usr/bin/env python
+# encoding: utf-8
 
-locale.getdefaultlocale()
+'''
+                Author:   Sean Knight
+                          shknight@ucsc.edu
+            Assignment:   Homework 02: While Language (Big Step)
+                 Class:   CSE 201A Programming Languages
+
+
+while.py
+This program is a Big Step interpreter for the While programming language.
+While receives a statement (composed of sub-statements, expressions
+[boolean, arithmetic], variables, and literals [boolean, integer, string]).
+The statement is tokenized and parse into an Abstract Syntax Tree,
+representing each operation and its precedence in the statement overall.
+The AST is then interpreted in a Depth First Search (implicitly evaluating
+operations on a Last-In First-Out basis).
+The identifier/value pair representing the statement's solution is then
+output to stdout in the form:
+
+                     {[identifier] → [value]}
+
+
+For requirements, installation and execution instructions, see included
+README.md file.
+
+For testing, see included test.sh file and example tests in
+./hw2-shknight/tests/
+
+In creating this script, I referenced:
+- Writing an Interpreter:
+  https://www.toptal.com/scala/writing-an-interpreter
+- Implementing hWhile:
+  (Though this guid is for the Haskell language, it provides a very easy to
+  read and comprehensive breakdown of input statement grammar, and great
+  explanations for sematics)
+  https://hackage.haskell.org/package/hwhile
+- Programming Languages and Compiler Design:
+  (Excellent discussion of ASTs, Semantics (Operational, Natural, Big Step,
+  Small Step, etc.), components of a language, and a component breakdown of
+  the While language that I found to be a great starting point)
+  http://www-verimag.imag.fr/~daubigna/plcd/semcours.pdf
+- The While programming language
+  (A paper explaining Big Step and Small Step semantics in relation to the
+  While programming language specifically)
+  http://profs.sci.univr.it/~merro/files/WhileExtra_l.pdf
+
+ Note to instructor:
+ I had originally attempted to write this assignment in the Go programming
+ language, but ran into so many problems, the assignment became one week late,
+ then I ran into problems generating a sufficient makefile and installing
+ necessary components in Linux, and it turned into two weeks, and so on. Had
+ I known that participation in the Go development community had waned and, thus,
+ tools for debugging have largely become deprecated, I would have reconsidered.
+
+ My apologies for the late submission.
+'''
 
 # Declaration and Initialization of Global Variables
 # Each variable represents a TokenType
@@ -212,6 +267,10 @@ class Lexer(object):
     # When Lexer.advance returns None, the while loop is broken, and Token(EOF, None) [signifying End Of File] is returned
     def get_next_token(self):
         while self.current is not None:
+            if self.current.isspace():
+                self.advance()
+                continue
+
             if (self.current.isnumeric() or self.current.strip('-').isnumeric() or (self.current == 0)):
                 value = int(self.current)
                 self.advance()
@@ -378,9 +437,15 @@ class Parser(object):
                 self.advance_after_verification(BOOL)
             return Operand_Node(current_token_type, current_value)
 
+        elif self.current.type == NOT:
+            self.advance_after_verification(NOT)
+            value = self.build_boolean_expression()
+
+            return Unary_Node(operator=NOT, child=value)
+
         elif current_token_type == LEFTPARENTHESIS:
             self.advance_after_verification(LEFTPARENTHESIS)
-            current_node = self.build_arithmetic_expression()
+            current_node = self.build_boolean_expression()
             self.advance_after_verification(RIGHTPARENTHESIS)
             return current_node
 
@@ -413,16 +478,15 @@ class Parser(object):
         current_node = self.build_term()
 
         while self.current.type in [ADD, SUB]:
-            current_token_type = self.current.type
-            current_token_value = self.current.value
+            current_token = self.current
 
-            if current_token_type == ADD:
+            if current_token.type == ADD:
                 self.advance_after_verification(ADD)
             else:
                 self.advance_after_verification(SUB)
 
-            current_node = Binary_Node(operator=Token(
-                current_token_type, current_token_value), left_child=current_node, right_child=self.build_term())
+            current_node = Binary_Node(
+                operator=current_token, left_child=current_node, right_child=self.build_term())
 
         return current_node
 
@@ -430,19 +494,6 @@ class Parser(object):
     # Fourth build_* function executed completely
     # A Boolean Comparison Operator [<, <=, >, >=] has been encountered
     def build_boolean_comparison(self):
-        if self.current.type == NOT:
-            self.advance_after_verification(NOT)
-            value = self.build_boolean_expression()
-
-            return Unary_Node(operator=NOT, child=value)
-
-        elif (self.current.type) is LEFTPARENTHESIS:
-            self.advance_after_verification(LEFTPARENTHESIS)
-            current_node = self.build_boolean_expression()
-            self.advance_after_verification(RIGHTPARENTHESIS)
-
-            return current_node
-
         current_node = self.build_arithmetic_expression()
 
         while self.current.type in [EQUAL, LESSTHAN, LESSTHANEQUALS, GREATERTHAN, GREATERTHANEQUALS]:
@@ -466,7 +517,7 @@ class Parser(object):
             current_token = self.current
             self.advance_after_verification(current_token.type)
             current_node = Binary_Node(
-                operator=current_token, left_child=current_node, right_child=self.build_boolean_expression())
+                operator=current_token, left_child=current_node, right_child=self.build_boolean_comparison())
 
         return current_node
 
@@ -475,22 +526,22 @@ class Parser(object):
     # Seventh build_* function executed completely
     # A [SKIP, LEFTBRACE, IF, WHILE, VARIABLE] has been encountered
     def build_statement(self):
+        if self.current.type == VARIABLE:
+            return self.build_assignment_statement()
         if self.current.type == SKIP:
             self.advance_after_verification(SKIP)
             return Skip_Node()
-        if self.current.type == LEFTBRACE:
-            self.advance_after_verification(LEFTBRACE)
-            scope = self.build_scope()
-            self.advance_after_verification(RIGHTBRACE)
-            return scope
         if self.current.type == IF:
             self.advance_after_verification(IF)
             return self.build_if_statement()
         if self.current.type == WHILE:
             self.advance_after_verification(WHILE)
             return self.build_while_statement()
-        if self.current.type == VARIABLE:
-            return self.build_assignment_statement()
+        if self.current.type == LEFTBRACE:
+            self.advance_after_verification(LEFTBRACE)
+            scope = self.build_scope()
+            self.advance_after_verification(RIGHTBRACE)
+            return scope
 
     # Called from Parser.build_statement() when VARIABLE token encountered
     # Sixth build_* function executed completely
@@ -507,14 +558,11 @@ class Parser(object):
     # Sixth build_* function executed completely
     # An IF, THEN and possibly ELSE have been encountered
     def build_if_statement(self):
-        false_branch = None
         condition = self.build_boolean_expression()
         self.advance_after_verification(THEN)
-        true_branch = self.build_scope()
-
-        if (self.current.type == ELSE):
-            self.advance_after_verification(ELSE)
-            false_branch = self.build_scope()
+        true_branch = self.build_statement()
+        self.advance_after_verification(ELSE)
+        false_branch = self.build_statement()
 
         return If_Node(condition, true_branch, false_branch)
 
@@ -669,9 +717,9 @@ class Interpreter(object):
             MOD: (lambda: int(left_operand) % int(right_operand)),
             AND: (lambda: bool(left_operand) and bool(right_operand)),
             OR: (lambda: bool(left_operand) or bool(right_operand)),
-            EQUAL: (lambda: int(left_operand) == int(right_operand)),
-            LESSTHAN: (lambda: bool(int(left_operand) < int(right_operand))),
-            LESSTHANEQUALS: (lambda: bool(int(left_operand) <= int(right_operand))),
+            EQUAL: (lambda: bool(int(left_operand) == int(right_operand))),
+            LESSTHAN: (lambda: int(left_operand) < int(right_operand)),
+            LESSTHANEQUALS: (lambda: int(left_operand) <= int(right_operand)),
             GREATERTHAN: (lambda: int(left_operand) > int(right_operand)),
             GREATERTHANEQUALS: (lambda: int(left_operand) >= int(right_operand)),
         }
@@ -730,7 +778,8 @@ class Interpreter(object):
     def visit_while_node(self, node):
         while (self.visit_node(node.condition)):
             self.visit_node(node.block_statement)
-            
+
+
 def main():
     user_input = input("").split()
     lexer = Lexer(user_input)
