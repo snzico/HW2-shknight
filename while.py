@@ -372,7 +372,7 @@ class Parser(object):
             current_token = self.current
 
             if self.current.type is MUL:
-                self.advance_after_verification(MUL)bui
+                self.advance_after_verification(MUL)
             else:
                 self.advance_after_verification(DIV)
 
@@ -532,6 +532,10 @@ class Interpreter(object):
     # Called from main() following initialization of Interpreter
     # Function begins by visiting the Interpreter.root_node
     # After every node is visited, the values stored in Interpreter.variables
+    # Receives:
+    #   - No argument
+    # Returns:
+    #   - Solution set as return_value as string value
     def evaluate(self):
         second_section = False
 
@@ -553,6 +557,14 @@ class Interpreter(object):
 
         return return_value
 
+    # Called from Interpreter.evaluate(), and each NodeType-specific visit_*_node statement
+    # Function uses dictionary to match NodeType to relevant visit_*_node function call
+    #   - Dictionary functions as an improvised switch statement
+    # Sets the return_value to value returned by visit_*_node call
+    # Receives:
+    #   - node represents the node passed by Interpreter.evaluate() and / or node passed by Interpreter.visit_*_node()
+    # Returns:
+    #   - value derived from statement evaluation as return_value
     def visit_node(self, node):
         node_type = type(node)
 
@@ -567,17 +579,41 @@ class Interpreter(object):
             While_Node: self.visit_while_node
         }
 
-        returnValue = match_type[node_type](node)
-        return returnValue
+        return_value = match_type[node_type](node)
+        return return_value
 
+    # Called from Interpreter.visit_node() match_type dictionary (improvised switch statement)
+    # Calls Interpreter.visit_node() for each child of Root_Node
+    # Receives:
+    #   - Root_Node as node
+    # Returns:
+    #   - No value returned
     def visit_root_node(self, node):
         self.visit_node(node.left_child)
         self.visit_node(node.right_child)
 
+    # Called from Interpreter.visit_node() match_type dictionary (improvised switch statement)
+    # Calls Interpreter.visit_node() on node field child
+    #   - If node field operator is NOT the value return by Interpreter.visit_node(node.child) is negated
+    # Receives:
+    #   - Unary_Node instance as node
+    # Returns:
+    #   - Negated value of expression evaluation of node
     def visit_unary_node(self, node):
         if (node.operator == NOT):
-            return nzzzzzzzzzzzzzzzzzzzzzzot self.visit_node(node.child)
+            return not self.visit_node(node.child)
 
+    # Called from Interpreter.visit_node() match_type dictionary (improvised switch statement)
+    # Checks if node operator is ASSIGN
+    #   - If so, the expression represented by the node and it's children is evaluated accordingly
+    #   - The identifier of the node is added to Interpreter.variables and the identifier/value pair are added to Interpreter.scope
+    #   - Returns no value
+    # Otherwise, Interpreter.visit_node() is called on both of node's children
+    # Interpreter.visit_binary_node() match_type dictionary (improvised switch statement) is used to determine Binary Operation (Arithmetic or Boolean) used to evaluate expression represented by node and it's child(ren) (if any)
+    # Receives:
+    #   - Binary_Node instance as node
+    # Returns:
+    #   - The value calculated by the relevant Arithmetic or Boolean operation called using match_operation dictionary
     def visit_binary_node(self, node):
         node_operation = node.operator.value
 
@@ -588,7 +624,7 @@ class Interpreter(object):
                 self.variables.append(identifier)
 
             value = self.visit_node(node.right_child)
-            self.scope[identifier] = valueb
+            self.scope[identifier] = value
             return
 
         left_operand = self.visit_node(node.left_child)
@@ -611,33 +647,67 @@ class Interpreter(object):
 
         return match_operation[node_operation]()
 
+    # Called from Interpreter.visit_node() match_type dictionary (improvised switch statement)
+    # Simply returns value held in Operand_Node node's field value
+    # Receives:
+    #   - Operand_Node instance as node
+    # Returns:
+    #   - ASSIGN symbol - or - Integer or Boolean Literal value is Operand_Node node's field value
     def visit_operand_node(self, node):
         return node.value
 
+    # Called from Interpreter.visit_node() match_type dictionary (improvised switch statement)
+    # Sets identifier/value pair in Interpreter.scope if identifier is not found in Interpreter.scope
+    # Gets value for node.identifier from Interpreter.scope
+    # Receives:
+    #   - Variable_Node instance as node
+    # Returns:
+    #   - Variable_Node node's field value
     def visit_variable_node(self, node):
         if node.identifier not in self.scope:
             self.scope[node.identifier] = 0
         return self.scope[node.identifier]
 
+    # Called from Interpreter.visit_node() match_type dictionary (improvised switch statement)
+    # Simply skips any instruction using 'pass' keyword
+    # Receives:
+    #   - Skip_Node instance as node
+    # Returns:
+    #   - No value returned
     def visit_skip_node(self, node):
         pass
 
+    # Called from Interpreter.visit_node() match_type dictionary (improvised switch statement)
+    # Runs Interpreter.visit_node(node.true_branch) if Interpreter.visit_node(node.condition) evaluates to true
+    # Otherwise, runs Interpreter.visit_node(node.false_branch)
+    # Receives:
+    #   - If_Node instance as node
+    # Returns:
+    #   - Returned value of Interpreter.visit_node(*_branch) relevant to evaluation of Interpreter.visit_node(node.condition)
     def visit_if_node(self, node):
         if (self.visit_node(node.condition)):
             return self.visit_node(node.true_branch)
         else:
             return self.visit_node(node.false_branch)
 
+    # Called from Interpreter.visit_node() match_type dictionary (improvised switch statement)
+    # Uses while loop to continuously evaluate Interpreter.visit_node(node.block_statement) as long as Interpreter.visit_node(node.condition) evaluates to True
+    # Receives:
+    #   - While_Node instance as node
+    # Returns:
+    #   - Returned value of Interpreter.visit_node(node.block_statement)
     def visit_while_node(self, node):
+        return_value = 0
         while (self.visit_node(node.condition)):
-            self.visit_node(node.block_statement)
+            return_value = self.visit_node(node.block_statement)
+        return return_value
 
 def main():
     user_input = 'while ( ¬ ( 0 - -1 < 2 + z ) ) do skip ; while -1 * IY = 2 - L ∧ 0 + x < 2 + 2 do while ( ¬ ( z + S = z - -1 ) ) do if ( false ∨ NT + -3 = 3 ) then y := k * 0 else y := 0 - y'.split()
     lexer = Lexer(user_input)
     parser = Parser(lexer)
     interpreter = Interpreter(parser)
-    interpreter.evaluate()
+    print(interpreter.evaluate())
 
 if __name__ == "__main__":
     main()
