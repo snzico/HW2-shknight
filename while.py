@@ -379,6 +379,9 @@ class Parser(object):
             return Operand_Node(current_token_type, current_value)
 
         elif current_token_type == LEFTPARENTHESIS:
+            self.advance_after_verification(LEFTPARENTHESIS)
+            current_node = self.build_arithmetic_expression()
+            self.advance_after_verification(RIGHTPARENTHESIS)
             return current_node
 
         elif current_token_type == VARIABLE:
@@ -437,6 +440,7 @@ class Parser(object):
             self.advance_after_verification(LEFTPARENTHESIS)
             current_node = self.build_boolean_expression()
             self.advance_after_verification(RIGHTPARENTHESIS)
+
             return current_node
 
         current_node = self.build_arithmetic_expression()
@@ -495,8 +499,7 @@ class Parser(object):
         left_child = self.build_variable(self.current.value)
         operator = Operand_Node(ASSIGN, ':=')
         self.advance_after_verification(ASSIGN)
-        right_child = self.build_boolean_expression()
-        left_child.value = right_child
+        right_child = self.build_arithmetic_expression()
 
         return Binary_Node(operator, left_child, right_child)
 
@@ -648,7 +651,7 @@ class Interpreter(object):
         if (str(node_operation) == ASSIGN):
             identifier = node.left_child.identifier
 
-            if (identifier not in self.scope):
+            if (identifier not in self.variables):
                 self.variables.append(identifier)
 
             value = self.visit_node(node.right_child)
@@ -725,12 +728,9 @@ class Interpreter(object):
     # Returns:
     #   - Returned value of Interpreter.visit_node(node.block_statement)
     def visit_while_node(self, node):
-        return_value = 0
         while (self.visit_node(node.condition)):
-            return_value = self.visit_node(node.block_statement)
-        return return_value
-
-
+            self.visit_node(node.block_statement)
+            
 def main():
     user_input = input("").split()
     lexer = Lexer(user_input)
