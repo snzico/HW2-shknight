@@ -516,6 +516,12 @@ class Parser(object):
 
         return current_node
 
+# Interpreter parses the parser, and assigns the resultant AST Root_Node to root_node
+# Interpreter then visits the Root_Node and each child, commencing a Depth-First Search of the entire AST
+# Interpreter(parser)
+# Receives:
+#   - Instance of Parser Class, parser, used to assign children to each not from high precedence to
+#     lowest, ensuring order of operations is followed during DFS in Interpreter.evaluate()
 class Interpreter(object):
     def __init__(self, parser):
         self.parser = parser
@@ -523,25 +529,28 @@ class Interpreter(object):
         self.scope = {}
         self.variables = []
 
+    # Called from main() following initialization of Interpreter
+    # Function begins by visiting the Interpreter.root_node
+    # After every node is visited, the values stored in Interpreter.variables
     def evaluate(self):
         second_section = False
-        return_value = self.visit_node(self.root_node)
 
+        self.visit_node(self.root_node)
         self.variables.sort()
 
         return_value = "{"
-
-        for section in self.variables:
+        # Loop through each varriable stored in Interpreter.variables list
+        # For input with multiple statements (scopes), a comma (', ') is inserted between solutions
+        for variables in self.variables:
 
             if (second_section):
-                return_value = ", "
+                return_value += ", "
 
-            return_value += str(section) + ' → ' + str(self.scope[section])
+            return_value += str(variable) + ' → ' + str(self.scope[variable])
             second_section = True
 
-        return_value += "}\n\n"
+        return_value += "}"
 
-        print(return_value)
         return return_value
 
     def visit_node(self, node):
@@ -567,7 +576,7 @@ class Interpreter(object):
 
     def visit_unary_node(self, node):
         if (node.operator == NOT):
-            return not self.visit_node(node.child)
+            return nzzzzzzzzzzzzzzzzzzzzzzot self.visit_node(node.child)
 
     def visit_binary_node(self, node):
         node_operation = node.operator.value
@@ -579,7 +588,7 @@ class Interpreter(object):
                 self.variables.append(identifier)
 
             value = self.visit_node(node.right_child)
-            self.scope[identifier] = value
+            self.scope[identifier] = valueb
             return
 
         left_operand = self.visit_node(node.left_child)
