@@ -11,19 +11,24 @@ LEFTPARENTHESIS, RIGHTPARENTHESIS, LEFTBRACKET, RIGHTBRACKET, LEFTBRACE, RIGHTBR
 # Receives:
 #   - Token.type is the relevant label (see global variables) for inputted token
 #   - Token.value is the inputted value
+
+
 class Token(object):
     def __init__(self, type, value):
         self.type = type
         self.value = value
 
     def __str__(self):
-        token_string = "\n--TOKEN  Token({type}, {value})  TOKEN--".format(type = self.type, value = self.value)
+        token_string = "\n--TOKEN  Token({type}, {value})  TOKEN--".format(
+            type=self.type, value=self.value)
         return token_string
 
     def __repr__(self):
         return self.__str__()
 
 # AST is no-op (pass) parent of each *_Node type
+
+
 class AST:
     pass
 
@@ -32,6 +37,8 @@ class AST:
 # Receives:
 #   - left_child is a *_Node or Token object that represents the immediate child node along the left edge of Root_Node
 #   - right_child is a *_Node or Token object that represents the immediate child node along the right edge of Root_Node
+
+
 class Root_Node(AST):
     def __init__(self, left_child, right_child):
         self.left_child = left_child
@@ -49,13 +56,15 @@ class Root_Node(AST):
 # Receives:
 #   - operator is a string that represents the operator used in the evaluation of the expression represented by the parameters of the Unary_Node
 #   - child is a *_Node or Token which represents the Unary_Node's value
+
+
 class Unary_Node(AST):
     def __init__(self, operator, child):
         self.operator = operator
         self.child = child
 
     def __str__(self):
-        return "\n--UNARYNODE  Unary_Node(Operator: <  {operator}  >,\nChild: <  {child}  >\n)  UNARYNODE--\n".format(operator = self.operator, child = repr(self.child))
+        return "\n--UNARYNODE  Unary_Node(Operator: <  {operator}  >,\nChild: <  {child}  >\n)  UNARYNODE--\n".format(operator=self.operator, child=repr(self.child))
 
     def __repr__(self):
         return self.__str__()
@@ -70,6 +79,8 @@ class Unary_Node(AST):
 #   - operator is an Operand_Node (for Assignment [:=]) or Token that represents the operator used in the evaluation of the expression represented by the parameters of the Binary_Node
 #   - left_child is a *_Node or Token object that represents the immediate child node along the left edge of Binary_Node
 #   - right_child is a *_Node or Token object that represents the immediate child node along the right edge of Binary_Node
+
+
 class Binary_Node(AST):
     def __init__(self, operator, left_child, right_child):
         self.operator = operator
@@ -77,11 +88,10 @@ class Binary_Node(AST):
         self.right_child = right_child
 
     def __str__(self):
-        return "\n--BINARYNODE\n\tBinary_Node(Operator: <  {operator}  >,\n\tLeft Child: <  {left_child}  >,\n\tRight Child: <  {right_child}  >\n)  BINARYNODE--\n".format(operator = repr(self.operator), left_child = repr(self.left_child), right_child = repr(self.right_child))
+        return "\n--BINARYNODE\n\tBinary_Node(Operator: <  {operator}  >,\n\tLeft Child: <  {left_child}  >,\n\tRight Child: <  {right_child}  >\n)  BINARYNODE--\n".format(operator=repr(self.operator), left_child=repr(self.left_child), right_child=repr(self.right_child))
 
     def __repr__(self):
         return self.__str__()
-
 
 
 # Operand_Node includes:
@@ -98,7 +108,7 @@ class Operand_Node(AST):
         self.value = value
 
     def __str__(self):
-        return "\n--OPERANDNODE  Operand_Node(Type: <  {type}  >,\nValue: <  {value}  >\n)  OPERANDNODE--\n".format(type = self.type, value = self.value)
+        return "\n--OPERANDNODE  Operand_Node(Type: <  {type}  >,\nValue: <  {value}  >\n)  OPERANDNODE--\n".format(type=self.type, value=self.value)
 
     def __repr__(self):
         return self.__str__()
@@ -110,13 +120,15 @@ class Operand_Node(AST):
 #   - identifier represents the alphanumeric identifier (name / placeholder) of the variable
 # Value is initialized to 0
 # Value is updated to variable value when Assignment Statement (variable := [value]) in Parser.build_assignment_statement (from Parser.build_statement() < Parser.build_scope() < Parser.parse())
+
+
 class Variable_Node(AST):
     def __init__(self, identifier):
         self.identifier = identifier
         self.value = 0
 
     def __str__(self):
-        return "\n--VARIABLENODE  Variable_Node(Identifier: <  {identifier}  >,\nValue: <  {value}  >\n)  VARIABLENODE--\n".format(identifier = self.identifier, value = self.value)
+        return "\n--VARIABLENODE  Variable_Node(Identifier: <  {identifier}  >,\nValue: <  {value}  >\n)  VARIABLENODE--\n".format(identifier=self.identifier, value=self.value)
 
     def __repr__(self):
         return self.__str__()
@@ -125,6 +137,8 @@ class Variable_Node(AST):
 # Skip_Node()
 # Receives:
 #   - No values received at or after initialization
+
+
 class Skip_Node(AST):
     pass
 
@@ -137,6 +151,8 @@ class Skip_Node(AST):
 #   - condition represents the conditional statement that is evaluated following an If token encounter
 #   - true_branch is a *_Node that represents the statement(s) executed when condition evaluates to True
 #   - false_branch is a *_Node that represents the statement(s) executed when condition evaluates to False
+
+
 class If_Node(AST):
     def __init__(self, condition, true_branch, false_branch):
         self.condition = condition
@@ -144,7 +160,7 @@ class If_Node(AST):
         self.false_branch = false_branch
 
     def __str__(self):
-        return "\n--IFNODE  If_Node(Condition: <  {condition}  >,\nTrue Branch: <  {true_branch}  >,\nFalse Branch: <  {false_branch}  >\n)  IFNODE--\n".format(condition = str(self.condition), true_branch = str(self.true_branch), false_branch = str(self.false_branch))
+        return "\n--IFNODE  If_Node(Condition: <  {condition}  >,\nTrue Branch: <  {true_branch}  >,\nFalse Branch: <  {false_branch}  >\n)  IFNODE--\n".format(condition=str(self.condition), true_branch=str(self.true_branch), false_branch=str(self.false_branch))
 
     def __repr__(self):
         return self.__str__()
@@ -154,13 +170,15 @@ class If_Node(AST):
 # Receives:
 #   - condition represents the conditional statement that is evaluated following a While token encounter until the condition evaluates to False
 #   - block_statement represents the statement(s) evaluated while the condition evaluates to True
+
+
 class While_Node(AST):
     def __init__(self, condition, block_statement):
         self.condition = condition
         self.block_statement = block_statement
 
     def __str__(self):
-        return "\n--WHILENODE  While_Node(Condition: <  {condition}  >,\nBlock Statement: <  {block_statement}  >\n)  WHILENODE--\n".format(condition = str(self.condition), block_statement = str(self.block_statement))
+        return "\n--WHILENODE  While_Node(Condition: <  {condition}  >,\nBlock Statement: <  {block_statement}  >\n)  WHILENODE--\n".format(condition=str(self.condition), block_statement=str(self.block_statement))
 
     def __repr__(self):
         return self.__str__()
@@ -169,6 +187,8 @@ class While_Node(AST):
 # Lexer(input)
 # Receives:
 #   - input represents user input via stdin that is split at every space value before passing to Lexer initialization
+
+
 class Lexer(object):
     def __init__(self, input):
         self.input = input
@@ -315,6 +335,8 @@ class Lexer(object):
 # Parser(lexer)
 # Receives:
 #   - lexer represents an instance of the Lexer class that has been initialized with user_input via stdin that has been split at each space
+
+
 class Parser(object):
     def __init__(self, lexer):
         self.lexer = lexer
@@ -336,7 +358,7 @@ class Parser(object):
     # An Assignment Operator or Variable Identifier has been encountered
     # Builds a Variable_Node with received identifier
     def build_variable(self, identifier):
-        current_node = Variable_Node(identifier = identifier)
+        current_node = Variable_Node(identifier=identifier)
         self.advance_after_verification(VARIABLE)
 
         return current_node
@@ -376,7 +398,8 @@ class Parser(object):
             else:
                 self.advance_after_verification(DIV)
 
-            current_node = Binary_Node(operator = current_token, left_child = current_node, right_child = self.build_factor())
+            current_node = Binary_Node(
+                operator=current_token, left_child=current_node, right_child=self.build_factor())
 
         return current_node
 
@@ -395,7 +418,8 @@ class Parser(object):
             else:
                 self.advance_after_verification(SUB)
 
-            current_node = Binary_Node(operator = Token(current_token_type, current_token_value), left_child = current_node, right_child = self.build_term())
+            current_node = Binary_Node(operator=Token(
+                current_token_type, current_token_value), left_child=current_node, right_child=self.build_term())
 
         return current_node
 
@@ -407,7 +431,7 @@ class Parser(object):
             self.advance_after_verification(NOT)
             value = self.build_boolean_expression()
 
-            return Unary_Node(operator = NOT, child = value)
+            return Unary_Node(operator=NOT, child=value)
 
         elif (self.current.type) is LEFTPARENTHESIS:
             self.advance_after_verification(LEFTPARENTHESIS)
@@ -420,7 +444,8 @@ class Parser(object):
         while self.current.type in [EQUAL, LESSTHAN, LESSTHANEQUALS, GREATERTHAN, GREATERTHANEQUALS]:
             current_token = self.current
             self.advance_after_verification(current_token.type)
-            current_node = Binary_Node(operator = current_token, left_child = current_node, right_child = self.build_arithmetic_expression())
+            current_node = Binary_Node(
+                operator=current_token, left_child=current_node, right_child=self.build_arithmetic_expression())
 
         return current_node
 
@@ -436,7 +461,8 @@ class Parser(object):
         while self.current.type in [AND, OR]:
             current_token = self.current
             self.advance_after_verification(current_token.type)
-            current_node = Binary_Node(operator = current_token, left_child = current_node, right_child = self.build_boolean_expression())
+            current_node = Binary_Node(
+                operator=current_token, left_child=current_node, right_child=self.build_boolean_expression())
 
         return current_node
 
@@ -522,6 +548,8 @@ class Parser(object):
 # Receives:
 #   - Instance of Parser Class, parser, used to assign children to each not from high precedence to
 #     lowest, ensuring order of operations is followed during DFS in Interpreter.evaluate()
+
+
 class Interpreter(object):
     def __init__(self, parser):
         self.parser = parser
@@ -545,7 +573,7 @@ class Interpreter(object):
         return_value = "{"
         # Loop through each varriable stored in Interpreter.variables list
         # For input with multiple statements (scopes), a comma (', ') is inserted between solutions
-        for variables in self.variables:
+        for variable in self.variables:
 
             if (second_section):
                 return_value += ", "
@@ -702,12 +730,14 @@ class Interpreter(object):
             return_value = self.visit_node(node.block_statement)
         return return_value
 
+
 def main():
-    user_input = 'while ( ¬ ( 0 - -1 < 2 + z ) ) do skip ; while -1 * IY = 2 - L ∧ 0 + x < 2 + 2 do while ( ¬ ( z + S = z - -1 ) ) do if ( false ∨ NT + -3 = 3 ) then y := k * 0 else y := 0 - y'.split()
+    user_input = input("").split()
     lexer = Lexer(user_input)
     parser = Parser(lexer)
     interpreter = Interpreter(parser)
     print(interpreter.evaluate())
+
 
 if __name__ == "__main__":
     main()
