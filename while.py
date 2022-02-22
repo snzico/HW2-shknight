@@ -212,7 +212,7 @@ class Lexer(object):
     # When Lexer.advance returns None, the while loop is broken, and Token(EOF, None) [signifying End Of File] is returned
     def get_next_token(self):
         while self.current is not None:
-            if (self.current.isnumeric() or self.current.strip('-').isnumeric()):
+            if (self.current.isnumeric() or self.current.strip('-').isnumeric() or (self.current == 0)):
                 value = int(self.current)
                 self.advance()
                 return Token(INTEGER, value)
@@ -670,8 +670,8 @@ class Interpreter(object):
             AND: (lambda: bool(left_operand) and bool(right_operand)),
             OR: (lambda: bool(left_operand) or bool(right_operand)),
             EQUAL: (lambda: int(left_operand) == int(right_operand)),
-            LESSTHAN: (lambda: int(left_operand) < int(right_operand)),
-            LESSTHANEQUALS: (lambda: int(left_operand) <= int(right_operand)),
+            LESSTHAN: (lambda: bool(int(left_operand) < int(right_operand))),
+            LESSTHANEQUALS: (lambda: bool(int(left_operand) <= int(right_operand))),
             GREATERTHAN: (lambda: int(left_operand) > int(right_operand)),
             GREATERTHANEQUALS: (lambda: int(left_operand) >= int(right_operand)),
         }
