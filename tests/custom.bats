@@ -5,7 +5,7 @@ load harness
 }
 
 @test "custom-2" {
-  check 'if ( true ) ∧ ¬ ( false ) then x := (6 / 2) else r9 := 6' '{x → 3}'
+  check 'if ( ¬ ( false ) ) then x := ( 6 % 4 )  else r9 := 6' '{x → 2}'
 }
 
 @test "custom-3" {

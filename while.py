@@ -463,8 +463,9 @@ class Parser(object):
 
             if self.current.type is MUL:
                 self.advance_after_verification(MUL)
-            else:
+            elif self.current.type is DIV:
                 self.advance_after_verification(DIV)
+            
 
             current_node = Binary_Node(
                 operator=current_token, left_child=current_node, right_child=self.build_factor())
@@ -477,13 +478,15 @@ class Parser(object):
     def build_arithmetic_expression(self):
         current_node = self.build_term()
 
-        while self.current.type in [ADD, SUB]:
+        while self.current.type in [ADD, SUB, MOD]:
             current_token = self.current
 
             if current_token.type == ADD:
                 self.advance_after_verification(ADD)
-            else:
+            elif current_token.type == SUB:
                 self.advance_after_verification(SUB)
+            else:
+                self.advance_after_verification(MOD)
 
             current_node = Binary_Node(
                 operator=current_token, left_child=current_node, right_child=self.build_term())
@@ -781,6 +784,7 @@ class Interpreter(object):
 
 
 def main():
+    print("Input equation: ")
     user_input = input("").split()
     lexer = Lexer(user_input)
     parser = Parser(lexer)

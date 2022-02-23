@@ -17,5 +17,6 @@ run:
 	sudo rm -rfv dist
 	sudo rm -rfv while.spec 
 
-	sudo chmod -R 777 ~/Documents
+	sudo chmod -R 777 ~/Documents/
+	sudo cd ~/Documents/hw2-shknight/
 	
