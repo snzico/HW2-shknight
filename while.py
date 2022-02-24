@@ -1,6 +1,6 @@
-#!/usr/bin/env python
-#encoding: utf-8
-
+# !/usr/bin/env python
+# encoding: utf-8
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 ''' While Programming Language
     Big Step
 
@@ -84,7 +84,7 @@ batchfile; input format; etc.), see included test.sh file and example tests in:
 '''
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Global Variable Declarations
 Declaration and Initialization of Global Variables
@@ -93,7 +93,7 @@ Each variable represents a TokenType
 LEFTPARENTHESIS, RIGHTPARENTHESIS, LEFTBRACKET, RIGHTBRACKET, LEFTBRACE, RIGHTBRACE, ADD, SUB, MUL, DIV, MOD, LESSTHAN, LESSTHANEQUALS, GREATERTHAN, GREATERTHANEQUALS, NOT, EQUAL, AND, OR, COLON, SEMICOLON, ASSIGN, WHILE, DO, SKIP, TERNARY, IF, THEN, ELSE, BOOL, TRUE, FALSE, VARIABLE, INTEGER, STRING, EOF = '(', ')', '[', ']', '{', '}', '+', '-', '*', '/', '%', '<', '<=', '>', '>=', '¬', '=', '∧', '∨', ':', ';', ':=', 'while', 'do', 'skip', '?', 'if', 'then', 'else', 'bool', 'true', 'false', 'identifier', 'integer', 'string', 'EOF'
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Token Class Definition
 Token includes each alphanumeric value, delimited by spaces, inputted via stdin
@@ -117,7 +117,7 @@ class Token(object):
         return self.__str__()
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 AST Class Definition
 AST is no-op (pass) parent of each *_Node type
@@ -126,7 +126,7 @@ class AST:
     pass
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Root_Node Class Definition
 Root_Node is the root node of the AST
@@ -149,7 +149,7 @@ class Root_Node(AST):
         return self.__str__()
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Unary_Node Class Definition
 Unary_Node includes:
@@ -172,7 +172,7 @@ class Unary_Node(AST):
         return self.__str__()
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Binary_Node Class Definition
 Binary_Node includes:
@@ -207,7 +207,7 @@ class Binary_Node(AST):
         return self.__str__()
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Operand_Node Class Definition
 Operand_Node includes:
@@ -233,7 +233,7 @@ class Operand_Node(AST):
         return self.__str__()
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Variable_Node Class Definition
 Variable_Node includes all variables
@@ -260,7 +260,7 @@ class Variable_Node(AST):
         return self.__str__()
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Skip_Node Class Definition
 Skip_Node includes Skip statements found in conditional statements
@@ -275,7 +275,7 @@ class Skip_Node(AST):
         return "\n--SKIPNODE Skip_Node{{pass}}  SKIPNODE--\n"
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 If_Node Class Definition
 If_Node represents If (Conditional Command) Statements
@@ -301,7 +301,7 @@ class If_Node(AST):
         return self.__str__()
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 ''' While_Node Class Definition
 While_Node represents While (Loop) Statements
 While_Node(condition, block_statement)
@@ -323,7 +323,7 @@ class While_Node(AST):
         return self.__str__()
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Lexer Class Definition
 Lexer receives user input as a list of values that can include any value
@@ -340,7 +340,7 @@ class Lexer(object):
         self.current = self.input[self.index]
 
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Lexer.advance() function
     #    Lexer.index is incremented by 1
     #    If Lexer.index is in the bounds of Lexer.input, the current element to
@@ -355,7 +355,7 @@ class Lexer(object):
             self.current = self.input[self.index]
 
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Lexer.get_next_token() function
     #   Lexer.current is compared to each Global Variable by value
     #   Should a match be found, a relevant Token() is created
@@ -493,6 +493,7 @@ class Lexer(object):
         return Token(EOF, None)
 
 
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Parser Class Definition
 Parser iterates through the tokens in Lexer and parses an AST relative to the
@@ -507,19 +508,20 @@ class Parser(object):
         self.lexer = lexer
         self.current = self.lexer.get_next_token()
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.parse() function
     #    Begin parsing of first (and possibly only) Scope
     def parse(self):
         return self.build_scope()
 
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.advance() function
     #    Set current Token to the value returned by lexer.get_next_token() and
     #    received by Parser.lexer field
     def advance(self):
         self.current = self.lexer.get_next_token()
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.advance_after_verification() function
     #    Verify that the source TokenType is equivalent to the destination
     #    TokenType before assign next token from Parser.lexer to Parser.current
@@ -527,7 +529,7 @@ class Parser(object):
         if (self.current.type) == token_type:
             self.advance()
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_bariable() function
     #    An Assignment Operator or Variable Identifier has been encountered
     #    Builds a Variable_Node with received identifier
@@ -537,7 +539,7 @@ class Parser(object):
 
         return current_node
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_factor() function
     #    Called from Parser.build_term(), at first line of .build_term(), or
     #        during creation of Binary_Node() for MUL or DIV
@@ -554,6 +556,7 @@ class Parser(object):
                 self.advance_after_verification(INTEGER)
             else:
                 self.advance_after_verification(BOOL)
+
             return Operand_Node(current_token_type, current_value)
 
         elif self.current.type == NOT:
@@ -566,12 +569,13 @@ class Parser(object):
             self.advance_after_verification(LEFTPARENTHESIS)
             current_node = self.build_boolean_expression()
             self.advance_after_verification(RIGHTPARENTHESIS)
+
             return current_node
 
         elif current_token_type == VARIABLE:
             return self.build_variable(current_value)
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_term() function
     #    Called from Parser.build_arithmetic_expression(), at first line of
     #        .build_arithmetic_expression(), or during creation of Binary_Node()
@@ -594,7 +598,7 @@ class Parser(object):
 
         return current_node
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_arithmetic_expression() function
     #    Called from Parser.build_boolean_comparison() function, after
     #        self.current is tested against NOT and LEFTPARENTHESIS, or during
@@ -619,7 +623,7 @@ class Parser(object):
 
         return current_node
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_boolean_comparison() function
     #    Called from Parser.build_boolean_expression() function, at first line
     #        of .build_boolean_expression() source code
@@ -633,9 +637,10 @@ class Parser(object):
             self.advance_after_verification(current_token.type)
             current_node = Binary_Node(
                 operator=current_token, left_child=current_node, right_child=self.build_arithmetic_expression())
+
         return current_node
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_boolean_expression() function
     #    Called from Parser.build_boolean_comparison() when self.current is
     #        [NOT, LEFTPARENTHESIS],  Parser.build_boolean_expression() during
@@ -665,9 +670,10 @@ class Parser(object):
             false_branch = self.build_boolean_expression()
 
             current_node = If_Node(condition, true_branch, false_branch)
+
         return current_node
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_statement() function
     #    Called from Parser.build_while_statement() as block_statement during
     #        creation of While_Node, and from Parser.build_scope() to begin
@@ -676,7 +682,8 @@ class Parser(object):
     #    A [SKIP, LEFTBRACE, IF, WHILE, VARIABLE] has been encountered
     def build_statement(self):
         if self.current.type == VARIABLE:
-            return self.build_assignment_statement()
+            variable_node = self.build_assignment_statement()
+            return variable_node
 
         if self.current.type == SKIP:
             self.advance_after_verification(SKIP)
@@ -684,19 +691,21 @@ class Parser(object):
 
         if self.current.type == IF:
             self.advance_after_verification(IF)
-            return self.build_if_statement()
+            if_node = self.build_if_statement()
+            return if_node
 
         if self.current.type == WHILE:
             self.advance_after_verification(WHILE)
-            return self.build_while_statement()
+            while_node = self.build_while_statement()
+            return while_node
 
         if self.current.type == LEFTBRACE:
             self.advance_after_verification(LEFTBRACE)
-            scope = self.build_scope()
+            scope_node = self.build_scope()
             self.advance_after_verification(RIGHTBRACE)
-            return scope
+            return scope_node
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_assignment_statement() function
     #    Called from Parser.build_statement() when VARIABLE token
     #        encountered
@@ -711,7 +720,7 @@ class Parser(object):
         right_child = self.build_arithmetic_expression()
         return Binary_Node(operator, left_child, right_child)
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_statement() function
     #    Called from Parser.build_statement() when IF token encountered
     #    Sixth build_* function executed completely
@@ -724,9 +733,11 @@ class Parser(object):
 
         self.advance_after_verification(ELSE)
         false_branch = self.build_statement()
-        return If_Node(condition, true_branch, false_branch)
 
+        if_node = If_Node(condition, true_branch, false_branch)
+        return if_node
 
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_while_statement() function
     #    Called from Parser.build_statement() when WHILE token encountered
     #    Sixth build_* function executed completely
@@ -736,9 +747,11 @@ class Parser(object):
 
         self.advance_after_verification(DO)
         block_statement = self.build_statement()
-        return While_Node(condition, block_statement)
 
+        while_node = While_Node(condition, block_statement)
+        return while_node
 
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Parser.build_scope() function
     #    Called from Parser.parse() to begin parsing a complete statement with
     #        a definite scope, from Parser.build_statement() when LEFTBRACE
@@ -761,6 +774,7 @@ class Parser(object):
         return current_node
 
 
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 '''
 Interpreter Class Definition
 Interpreter parses the parser, and assigns the resultant AST Root_Node to
@@ -780,7 +794,7 @@ class Interpreter(object):
         self.scope = {}
         self.variables = []
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Interpreter.evaluate() function
     #    Called from main() following initialization of Interpreter
     #    Function begins by visiting the Interpreter.root_node
@@ -809,11 +823,7 @@ class Interpreter(object):
         return_value += "}"
         return return_value
 
-
-
-
-
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Interpreter.visit_node() function
     #    Called from Interpreter.evaluate(), and each NodeType-specific
     #        visit_*_node statement
@@ -843,7 +853,7 @@ class Interpreter(object):
         return_value = match_type[node_type](node)
         return return_value
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Interpreter.visit_root_node() function
     #    Called from Interpreter.visit_node() match_type dictionary (improvised
     #        switch statement)
@@ -856,7 +866,7 @@ class Interpreter(object):
         self.visit_node(node.left_child)
         self.visit_node(node.right_child)
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Interpreter.visit_unary_node() function
     #    Called from Interpreter.visit_node() match_type dictionary (improvised
     #        switch statement)
@@ -868,10 +878,12 @@ class Interpreter(object):
     #    Returns:
     #        - Negated value of expression evaluation of node
     def visit_unary_node(self, node):
-        if (node.operator == NOT):
-            return not self.visit_node(node.child)
+        operator = node.operator
+        child = self.visit_node(node.child)
+        if (operator == NOT):
+            return not child
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Interpreter.visit_binary_node() function
     #    Called from Interpreter.visit_node() match_type dictionary (improvised
     #        switch statement)
@@ -923,7 +935,7 @@ class Interpreter(object):
         }
         return match_operation[node_operation]()
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Interpreter.visit_operand_node() function
     #    Called from Interpreter.visit_node() match_type dictionary (improvised
     #        switch statement)
@@ -934,9 +946,10 @@ class Interpreter(object):
     #        - ASSIGN symbol - or - Integer or Boolean Literal value is
     #          Operand_Node node's field value
     def visit_operand_node(self, node):
-        return node.value
+        value = node.value
+        return value
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Interpreter.visit_variable_node() function
     #    Called from Interpreter.visit_node() match_type dictionary (improvised
     #        switch statement)
@@ -948,11 +961,12 @@ class Interpreter(object):
     #    Returns:
     #        - Variable_Node node's field value
     def visit_variable_node(self, node):
-        if node.identifier not in self.scope:
-            self.scope[node.identifier] = 0
-        return self.scope[node.identifier]
+        identifier = node.identifier
+        if identifier not in self.scope:
+            self.scope[identifier] = 0
+        return self.scope[identifier]
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Interpreter.visit_skip_node() function
     #    Called from Interpreter.visit_node() match_type dictionary (improvised
     #        switch statement)
@@ -964,7 +978,7 @@ class Interpreter(object):
     def visit_skip_node(self, node):
         pass
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Interpreter.visit_if_node() function
     #    Called from Interpreter.visit_node() match_type dictionary (improvised
     #        switch statement)
@@ -977,12 +991,15 @@ class Interpreter(object):
     #        - Returned value of Interpreter.visit_node(*_branch) relevant to
     #          evaluation of Interpreter.visit_node(node.condition)
     def visit_if_node(self, node):
-        if (self.visit_node(node.condition)):
-            return self.visit_node(node.true_branch)
+        condition = self.visit_node(node.condition)
+        if (condition):
+            true_branch = self.visit_node(node.true_branch)
+            return true_branch
         else:
-            return self.visit_node(node.false_branch)
+            false_branch = self.visit_node(node.false_branch)
+            return false_branch
 
-
+    #┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
     # Interpreter.visit_while_node() function
     #    Called from Interpreter.visit_node() match_type dictionary (improvised
     #        switch statement)
@@ -994,10 +1011,12 @@ class Interpreter(object):
     #    Returns:
     #        - Returned value of Interpreter.visit_node(node.block_statement)
     def visit_while_node(self, node):
-        while (self.visit_node(node.condition)):
-            self.visit_node(node.block_statement)
+        condition = self.visit_node(node.condition)
+        while (condition):
+            block_statement = self.visit_node(node.block_statement)
+            condition = self.visit_node(node.condition)
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 # while's main() function
 #    1.  Receives input from user via stdin that represents a While statement
 #        to be evaluated
@@ -1019,7 +1038,7 @@ def main():
     # easiest to copy the formula into a string variable and split it during
     # initialization.
     # To do so, uncomment line [user_input = "<.insert_statement>"]
-    # user_input = "if ( y * 4 < -1 - x ∧ -1 = 0 + y ) then z := ( -1 - -1 ) * -4 else z := 2 * -4 ; if ( y - -3 = y * z ∨ n * y < 1 * 2 ) then skip else if ( 1 < 0 - x ∨ true ) then x := y + -4 else y := -4 * y".split()
+    # user_input = "x := 10 ; y := 3 ; while y > 0 do y := x % y ; x := x - 3".split()
 
     lexer = Lexer(user_input)
     parser = Parser(lexer)
@@ -1028,7 +1047,7 @@ def main():
     print(interpreter.evaluate())
 
 
-
+#┏┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┒
 # Initialization of while's main() function
 if __name__ == "__main__":
     main()

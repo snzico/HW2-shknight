@@ -19,10 +19,10 @@ To create executable:
 3. Create executable of while.py:
   $ make -f Makefile
 
-To run while.py:
+To run while:
 1. Open an instance of Terminal
-2. Change the directory to hw2-shknight:
+2. Change the directory to hw2-shknight (if not already set):
   $ cd "[ENTER BASE DIRECTORY]/hw2-shknight"
 3. Run the program with Python:
-  $ python3 while.py
+  $ while
 4. Enter the statement you would like parsed and interpreted
